@@ -5,7 +5,6 @@ import axios from 'axios'
 export default function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
   const navigate = useNavigate()
 
   const handleLogin = async (e) => {
@@ -14,21 +13,19 @@ export default function LoginPage() {
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login/', {
         username,
-        password
+        password,
       }, {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
 
-      const { access } = response.data
-      localStorage.setItem('accessToken', access)
-      setError('')
-      navigate('/')
-
+      const token = response.data.access
+      localStorage.setItem('token', token)
+      navigate('/') // redirect to home after login
     } catch (err) {
-      console.error(err.response?.data)
-      setError('Login failed. Check your username and password.')
+      console.error(err.response?.data || err.message)
+      alert('Login failed. Check your username and password.')
     }
   }
 
@@ -36,27 +33,20 @@ export default function LoginPage() {
     <div>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        /><br />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        /><br />
         <button type="submit">Login</button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   )
 }
