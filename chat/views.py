@@ -36,4 +36,5 @@ class MessageListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         conversation_id = self.kwargs["conversation_id"]
-        serializer.save(sender=self.request.user, conversation_id=conversation_id)
+        conversation = Conversation.objects.get(id=conversation_id)
+        serializer.save(sender=self.request.user, conversation=conversation)
