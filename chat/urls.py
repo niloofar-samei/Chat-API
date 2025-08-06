@@ -1,5 +1,9 @@
 from django.urls import path
-from .views import UserRegistrationView, ConversationListCreateView
+from .views import (
+    UserRegistrationView,
+    ConversationListCreateView,
+    MessageListCreateView,
+)
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -10,5 +14,10 @@ urlpatterns = [
         "conversations/",
         ConversationListCreateView.as_view(),
         name="conversation-list-create",
+    ),
+    path(
+        "conversation/<int:conversation_id>/message/",
+        MessageListCreateView.as_view(),
+        name="message-list-create",
     ),
 ]
