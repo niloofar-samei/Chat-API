@@ -26,6 +26,8 @@ class ConversationSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
+    sender = serializers.ReadOnlyField(source="sender.username")
+
     class Meta:
         model = Message
         fields = ["id", "conversation", "sender", "text", "timestamp", "is_read"]
