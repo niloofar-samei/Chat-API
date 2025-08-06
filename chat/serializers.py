@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Conversation
+from .models import Conversation, Message
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -23,3 +23,10 @@ class ConversationSerializer(serializers.ModelSerializer):
         model = Conversation
         fields = ["id", "name", "participants", "created_at"]
         read_only_fields = ["id", "created_at"]
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ["id", "conversation", "sender", "text", "timestamp", "is_read"]
+        read_only_fields = ["id", "sender", "timestamp", "is_read"]
