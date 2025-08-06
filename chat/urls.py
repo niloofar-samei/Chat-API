@@ -16,7 +16,7 @@ urlpatterns = [
         name="conversation-list-create",
     ),
     path(
-        "conversation/<int:conversation_id>/message/",
+        "conversations/<int:conversation_id>/messages/",
         MessageListCreateView.as_view(),
         name="message-list-create",
     ),
