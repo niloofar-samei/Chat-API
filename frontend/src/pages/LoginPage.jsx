@@ -1,40 +1,41 @@
 import { useState } from 'react'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 export default function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState(null)
-
+  const [error, setError] = useState('')
   const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
 
-    console.log("Username:", username);
-    console.log("Password:", password);
-    
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login/', {
         username,
-        password,
-      },
-        {headers: {'Content-Type': 'application/json',},})
+        password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
 
-      const token = response.data.access
-      localStorage.setItem('accessToken', token)
+      const { access } = response.data
+      localStorage.setItem('accessToken', access)
+      setError('')
+      navigate('/')
 
-      navigate('/') // redirect after login
     } catch (err) {
-      setError('Invalid credentials')
+      console.error(err.response?.data)
+      setError('Login failed. Check your username and password.')
     }
   }
 
   return (
-    <div style={{ maxWidth: '400px', margin: '2rem auto' }}>
+    <div>
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <div>
           <label>Username:</label>
           <input
@@ -53,9 +54,9 @@ export default function LoginPage() {
             required
           />
         </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type="submit">Login</button>
       </form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   )
 }
