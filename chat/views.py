@@ -32,7 +32,9 @@ class MessageListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         conversation_id = self.kwargs["conversation_id"]
-        return Message.objects.filter(conversation__id=conversation_id)
+        return Message.objects.filter(conversation__id=conversation_id).order_by(
+            "-timestap"
+        )
 
     def perform_create(self, serializer):
         conversation_id = self.kwargs["conversation_id"]
