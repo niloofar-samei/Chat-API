@@ -11,11 +11,16 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    console.log("Username:", username);
+    console.log("Password:", password);
+    
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login/', {
         username,
         password,
-      })
+      },
+        {headers: {'Content-Type': 'application/json',},})
 
       const token = response.data.access
       localStorage.setItem('accessToken', token)
