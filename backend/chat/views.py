@@ -19,7 +19,9 @@ class ConversationListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Conversation.objects.filter(participants=self.request.user)
+        return Conversation.objects.filter(participants=self.request.user).order_by(
+            "-updated_at"
+        )
 
     def perform_create(self, serializer):
         conversation = serializer.save()
