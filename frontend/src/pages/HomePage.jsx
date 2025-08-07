@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from 'react-router-dom';
 
 export default function ConversationsPage() {
   const [conversations, setConversations] = useState(null);
@@ -12,9 +13,9 @@ export default function ConversationsPage() {
         const token = localStorage.getItem("accessToken");
         console.log("Token:", token); // ✅ debug
 
-        if (accessToken) {
+        if (token) {
         // Use the access token
-            console.log('Access Token:', accessToken);
+            console.log('Access Token:', token);
         } else {
             console.log('Access Token not found in local storage.');
         }
@@ -56,7 +57,7 @@ export default function ConversationsPage() {
       <h1>Your Conversations</h1>
       <ul>
         {conversations.map((conv) => (
-          <li key={conv.id}>{conv.name}</li>
+            <li key={conv.id}>{conv.name} - <Link to={`/chat/${conv.id}`}>{conv.name}</Link></li>
         ))}
       </ul>
     </div>
