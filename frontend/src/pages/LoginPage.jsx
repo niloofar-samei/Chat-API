@@ -21,7 +21,7 @@ export default function LoginPage() {
       })
 
       const token = response.data.access
-      localStorage.setItem('token', token)
+      localStorage.setItem('accessToken', token)
       navigate('/') // redirect to home after login
     } catch (err) {
       console.error(err.response?.data || err.message)
@@ -50,4 +50,3 @@ export default function LoginPage() {
     </div>
   )
 }
-
