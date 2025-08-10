@@ -1,65 +1,79 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from 'react-router-dom';
 
-export default function ConversationsPage() {
-  const [messages, setMessages] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const ChatPage = () => {
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const token = localStorage.getItem("accessToken");
+  const API_MESSAGES_URL = "http://localhost:8000/api/conversations/1/messages/";
 
   useEffect(() => {
-    async function fetchData() {
+    if (!token) return;
+
+    const fetchMessages = async () => {
       try {
-        const token = localStorage.getItem("accessToken");
-
-        if (token) {
-            console.log('Access Token:', token);
-        } else {
-            console.log('Access Token not found in local storage.');
-        }
-
-        const response = await axios.get("http://127.0.0.1:8000/api/conversations/1/messages", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const res = await axios.get(API_MESSAGES_URL, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-
-        console.log("Response data:", response.data);
-        setMessages(response.data);
-
+        setMessages(res.data);
       } catch (err) {
-
-        console.error("Error fetching:", err);
-        setError("Failed to load messages.");
-
-      } finally {
-        setLoading(false);
+        console.error("Failed to fetch messages:", err);
       }
+    };
+
+    fetchMessages();
+  }, [token]);
+
+  const handleSend = async () => {
+
+    if (!newMessage.trim()) return;
+
+    try {
+      const res = await axios.post(
+        API_MESSAGES_URL,
+        { text: newMessage },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setMessages((prev) => [...prev, res.data]);
+      setNewMessage("");
+    } catch (err) {
+      console.error("Failed to send message:", err);
     }
-
-    fetchData();
-  }, []);
-
-  console.log("Loading:", loading);
-  console.log("Error:", error);
-  console.log("Messages:", messages);
-  console.log("==================");
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-
-  if (!messages || messages.length === 0) {
-    return <p>No messages found.</p>;
-  }
+  };
 
   return (
     <div>
-      <h1>Your Messages</h1>
-      <ul>
-        {messages.map((mes) => (
-            <li key={mes.id}>{mes.text} - <Link to={`/chat/${mes.id}`}>{mes.text}</Link></li>
-        ))}
-      </ul>
+      <h2>Chat</h2>
+      <div
+        style={{
+          border: "1px solid #ccc",
+          height: "300px",
+          overflowY: "scroll",
+          padding: "10px",
+          marginBottom: "10px",
+        }}
+      >
+        {messages.length === 0 ? (
+          <p>No messages yet.</p>
+        ) : (
+          messages.map((msg) => (
+            <div key={msg.id} style={{ marginBottom: "8px" }}>
+              <strong>{msg.sender || "Anonymous"}:</strong> {msg.text}
+            </div>
+          ))
+        )}
+      </div>
+      <input
+        type="text"
+        value={newMessage}
+        onChange={(e) => setNewMessage(e.target.value)}
+        placeholder="Type your message..."
+        onKeyDown={(e) => e.key === "Enter" && handleSend()}
+        style={{ width: "80%", marginRight: "10px" }}
+      />
+      <button onClick={handleSend}>Send</button>
     </div>
   );
-}
+};
+
+export default ChatPage;
