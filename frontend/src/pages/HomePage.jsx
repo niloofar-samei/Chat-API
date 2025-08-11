@@ -77,7 +77,9 @@ export default function ConversationsPage() {
       <h1>Your Conversations</h1>
       <ul>
         {conversations.map((conv) => (
-            <li key={conv.id}>{conv.name} - <Link to={`/chat/${conv.id}`}>{conv.name}</Link></li>
+            <li key={conv.id}>
+                <Link to={`/chat/${conv.id}`}>{conv.name}</Link>
+            </li>
         ))}
       </ul>
 
