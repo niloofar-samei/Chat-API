@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
-  const token = localStorage.getItem("accessToken");
-  const API_MESSAGES_URL = "http://localhost:8000/api/conversations/1/messages/";
+    const { conversationId } = useParams();
+    console.log(conversationId)
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState("");
+    const token = localStorage.getItem("accessToken");
+    const API_MESSAGES_URL = `http://localhost:8000/api/conversations/${conversationId}/messages/`;
 
   useEffect(() => {
     if (!token) return;
