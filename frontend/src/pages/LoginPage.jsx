@@ -1,33 +1,28 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import api from '../api';
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const navigate = useNavigate()
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const navigate = useNavigate()
+    const API_LOGIN_URL = 'http://127.0.0.1:8000/api/login/';
 
-  const handleLogin = async (e) => {
-    e.preventDefault()
+    const handleLogin = async (e) => {
+        e.preventDefault()
 
-    try {
-      const response = await axios.post('http://127.0.0.1:8000/api/login/', {
-        username,
-        password,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+        try {
+            const response = await api.post(API_LOGIN_URL,{username, password});
 
-      const token = response.data.access
-      localStorage.setItem('accessToken', token)
-      navigate('/') // redirect to home after login
-    } catch (err) {
-      console.error(err.response?.data || err.message)
-      alert('Login failed. Check your username and password.')
+            localStorage.setItem('accessToken', response.data.access)
+            localStorage.setItem('refreshToken', response.data.refresh)
+            navigate('/')
+        } catch (err) {
+            console.error(err.response?.data || err.message)
+            alert('Login failed. Check your username and password.')
+        }
     }
-  }
 
   return (
       <div style={{border:"1px solid red", padding:"20px"}}>

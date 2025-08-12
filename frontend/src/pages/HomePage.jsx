@@ -1,69 +1,50 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from "react"
+import axios from "axios"
+import { Link } from 'react-router-dom'
+//import { refreshToken } from '../auth'
+import api from '../api';
 
 export default function ConversationsPage() {
-  const [conversations, setConversations] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [newConversation, setNewConversation] = useState("");
-  const token = localStorage.getItem("accessToken");
+    const [conversations, setConversations] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [newConversation, setNewConversation] = useState("");
+    const API_CONVERSATIONS_URL = `http://localhost:8000/api/conversations/`;
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const token = localStorage.getItem("accessToken");
-        console.log("Token:", token); // ✅ debug
+    useEffect(() => {
+        async function fetchData() {
+            try {
 
-        if (token) {
-        // Use the access token
-            console.log('Access Token:', token);
-        } else {
-            console.log('Access Token not found in local storage.');
+                const response = await api.get(API_CONVERSATIONS_URL);
+                setConversations(response.data);
+
+            } catch (err) {
+
+                setError("Failed to load conversations.");
+
+            } finally {
+                setLoading(false);
+            }
         }
 
-        const response = await axios.get("http://127.0.0.1:8000/api/conversations/", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        console.log("Response data:", response.data); // ✅ debug
-        setConversations(response.data);
-      } catch (err) {
-        console.error("Error fetching:", err);
-        setError("Failed to load conversations.");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, [token]);
+        fetchData();
+    }, []);
 
   const handleSend = async () => {
 
     if (!newConversation.trim()) return;
 
     try {
-      const res = await axios.post(
-          "http://127.0.0.1:8000/api/conversations/",
-          { name: newConversation, participants: [4,5] },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+
+      const res = await api.post(API_CONVERSATIONS_URL,
+                                   { name: newConversation, participants: [4,5] });
       setConversations((prev) => [...prev, res.data]);
       setNewConversation("");
+
     } catch (err) {
       console.error("Failed to send message:", err);
     }
   };
-
-
-  // 🧠 Debug outputs to console
-  console.log("Loading:", loading);
-  console.log("Error:", error);
-  console.log("Conversations:", conversations);
-    console.log("==================");
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
