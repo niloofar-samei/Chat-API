@@ -7,7 +7,7 @@ const ChatPage = () => {
     console.log(conversationId)
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
-    const API_MESSAGES_URL = `http://localhost:8000/api/conversations/${conversationId}/messages/`;
+    const API_MESSAGES_URL = `/conversations/${conversationId}/messages/`;
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -50,6 +50,7 @@ const ChatPage = () => {
           overflowY: "scroll",
           padding: "10px",
           marginBottom: "10px",
+              backgroundColor: " #e6e6ff"
         }}
       >
         {messages.length === 0 ? (

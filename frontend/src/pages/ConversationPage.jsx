@@ -51,7 +51,7 @@ export default function ConversationsPage() {
 
   return (
     <div>
-      <h1>Your Conversations</h1>
+      <h2>Your Conversations</h2>
       <ul>
         {conversations.map((conv) => (
             <li key={conv.id}>
@@ -61,14 +61,14 @@ export default function ConversationsPage() {
       </ul>
 
         <input
-        type="text"
-        value={newConversation}
-        onChange={(e) => setNewConversation(e.target.value)}
-        placeholder="Conversation name..."
-        onKeyDown={(e) => e.key === "Enter" && handleSend()}
-        style={{ width: "80%", marginRight: "10px" }}
-      />
-      <button onClick={handleSend}>Send</button>
+            type="text"
+            value={newConversation}
+            onChange={(e) => setNewConversation(e.target.value)}
+            placeholder="Conversation name..."
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            style={{ width: "80%", marginRight: "10px" }}
+        />
+        <button onClick={handleSend}>Send</button>
 
     </div>
   );
