@@ -37,24 +37,14 @@ export default function LoginPage() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-            }}
+            }}>
 
-        >
+            <Logo><LoginLogo/></Logo>
+            <Username name="userUserName" onChange={(e) => setUsername(e.target.value)}/>
+            <Password name="userPassword" onChange={(e) => setPassword(e.target.value)}/>
+            <Submit onClick={handleLogin}>Submit</Submit>
 
-                <form onSubmit={handleLogin}>
-                    <Logo><LoginLogo/></Logo>
-
-                    <Username name="userUserName" value="username"
-                              onChange={(e) => setUsername(e.target.value)}/>
-                    <Password name="userPassword"
-                        onChange={(e) => setPassword(e.target.value)}/>
-
-                    <Submit>Submit</Submit>
-
-                </form>
-
-            </ReactLoginPage>
-
+        </ReactLoginPage>
 
     )
 }
