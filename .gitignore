@@ -5,6 +5,8 @@ __pycache__/
 *.py~
 *.swp
 *.jsx#
+*.js~
+*.jsx~
 # C extensions
 *.so
 
