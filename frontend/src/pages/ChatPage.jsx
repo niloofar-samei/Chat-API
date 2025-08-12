@@ -40,40 +40,50 @@ const ChatPage = () => {
         }
     };
 
-  return (
-    <div>
-      <h2>Chat</h2>
-      <div
-        style={{
-          border: "1px solid #ccc",
-          height: "300px",
-          overflowY: "scroll",
-          padding: "10px",
-          marginBottom: "10px",
-              backgroundColor: " #e6e6ff"
-        }}
-      >
-        {messages.length === 0 ? (
-          <p>No messages yet.</p>
-        ) : (
-          messages.map((msg) => (
-            <div key={msg.id} style={{ marginBottom: "8px" }}>
-              <strong>{msg.sender || "Anonymous"}:</strong> {msg.text}
-            </div>
-          ))
-        )}
+    return (
+      <div>
+        <h2>Chat</h2>
+        <div
+          style={{
+                border: "1px solid #ccc",
+                height: "300px",
+                overflowY: "scroll",
+                padding: "10px",
+                marginBottom: "10px",
+                backgroundColor: " #e6e6ff"
+            }}>
+
+            {messages.length === 0 ? (
+                <p>No messages yet.</p>
+            ) : (
+                messages.map((msg) => (
+                    <div key={msg.id} style={{ marginBottom: "8px" }}>
+                        <strong>{msg.sender || "Anonymous"}:</strong> {msg.text}
+                    </div>
+                ))
+            )}
+        </div>
+          <input
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder="Type your message..."
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              style={{
+                  width: "60%",
+                  marginRight: "10px",
+                  height: "40px",
+                  backgroundColor: "#e6e6ff",
+                  border: "1px solid #ccc"
+              }}
+          />
+          <button onClick={handleSend}
+                  style={{ border: "1px solid #ccc",
+                           padding: "11px",
+                           color: "#ccc"
+                         }}>Send</button>
       </div>
-      <input
-        type="text"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        placeholder="Type your message..."
-        onKeyDown={(e) => e.key === "Enter" && handleSend()}
-        style={{ width: "80%", marginRight: "10px" }}
-      />
-      <button onClick={handleSend}>Send</button>
-    </div>
-  );
+    );
 };
 
 export default ChatPage;
