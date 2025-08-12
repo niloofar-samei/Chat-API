@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import axios from 'axios';
+import ReactLoginPage, { Logo, Username, Password, Submit, Footer } from '@react-login-page/page7';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('')
@@ -8,15 +9,18 @@ export default function LoginPage() {
     const [email, setEmail] = useState('')
     const navigate = useNavigate()
     const API_REGISTER_URL = 'http://localhost:8000/api/register/';
+    const API_LOGIN_URL = 'http://localhost:8000/api/login/';
 
     const handleRegister = async (e) => {
         e.preventDefault()
 
         try {
-            const response = await axios.post(API_REGISTER_URL, { username, password, email });
+            await axios.post(API_REGISTER_URL, { username, password, email });
 
-            localStorage.setItem('accessToken', response.data.access)
-            localStorage.setItem('refreshToken', response.data.refresh)
+            const loginResponse = await axios.post(API_LOGIN_URL, { username, password });
+
+            localStorage.setItem('accessToken', loginResponse.data.access)
+            localStorage.setItem('refreshToken', loginResponse.data.refresh)
             navigate('/')
 
         } catch (err) {
@@ -28,45 +32,87 @@ export default function LoginPage() {
     }
 
   return (
-      <div style={{border:"1px solid red", padding:"20px"}}>
-      <h2>Register</h2>
+      <div style={{
+               width: "100vw",
+                height: "100vh",
+                display: "flex",
+                justifyContent: "center",
+               alignItems: "center",
+               backgroundColor: "#99e6ff",
+           }}>
 
       <form onSubmit={handleRegister}>
-
-          <label htmlFor="username">User Name</label><br />
+          <h3 style={{ color: "white", textAlign: "center" }}>Register</h3>
           <input
               type="text"
               placeholder="Your username"
-              id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              style={{
+                  height: "40px",
+                  width: "300px",
+                  border: "1px solid white",
+                  borderRadius: "5px",
+                  backgroundColor: "#99e6ff",
+                  marginBottom: "20px",
+                  textAlign: "center",
+                  color: "white"
+              }}
           />
           <br />
 
-          <label htmlFor="pw">Password</label><br />
           <input
               type="password"
               placeholder="Your password"
-              id="pw"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              style={{
+                  height: "40px",
+                  width: "300px",
+                  border: "1px solid white",
+                  borderRadius: "5px",
+                  backgroundColor: "#99e6ff",
+                  marginBottom: "20px",
+                  textAlign: "center",
+                  color: "white"
+              }}
           />
           <br />
 
-          <label htmlFor="email">Email</label><br />
           <input
               type="email"
               placeholder="Your email"
-              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              style={{
+                  height: "40px",
+                  width: "300px",
+                  border: "1px solid white",
+                  borderRadius: "5px",
+                  backgroundColor: "#99e6ff",
+                  marginBottom: "20px",
+                  textAlign: "center",
+                  color: "white"
+              }}
           />
           <br />
 
-        <button type="submit">Register</button>
+        <button type="submit"
+                style={{
+                    height: "40px",
+                    width: "308px",
+                    border: "1px solid white",
+                    borderRadius: "5px",
+                    color: "#99e6ff",
+                    backgroundColor: "white",
+                }}>Register</button>
 
+          <p style={{color: "white", textAlign: "center"}}>
+              Are you a member? <a href='/login/' style={{ color: "white" }}>Login</a>
+          </p>
       </form>
 
     </div>
+
   )
 }

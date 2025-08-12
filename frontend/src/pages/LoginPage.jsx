@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import axios from 'axios';
 import ReactLoginPage, { Logo, Username, Password, Submit, Footer } from '@react-login-page/page7';
 import LoginLogo from 'react-login-page/logo-rect';
 
@@ -14,7 +14,7 @@ export default function LoginPage() {
         e.preventDefault()
 
         try {
-            const response = await api.post(API_LOGIN_URL, { username, password });
+            const response = await axios.post(API_LOGIN_URL, { username, password });
 
             localStorage.setItem('accessToken', response.data.access)
             localStorage.setItem('refreshToken', response.data.refresh)
