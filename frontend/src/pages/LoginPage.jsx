@@ -1,6 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api';
 
 export default function LoginPage() {
@@ -13,14 +12,17 @@ export default function LoginPage() {
         e.preventDefault()
 
         try {
-            const response = await api.post(API_LOGIN_URL,{username, password});
+            const response = await api.post(API_LOGIN_URL, { username, password });
 
             localStorage.setItem('accessToken', response.data.access)
             localStorage.setItem('refreshToken', response.data.refresh)
             navigate('/')
+
         } catch (err) {
+
             console.error(err.response?.data || err.message)
             alert('Login failed. Check your username and password.')
+
         }
     }
 

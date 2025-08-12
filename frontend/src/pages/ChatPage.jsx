@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
-//import { refreshToken } from '../auth';
 import api from '../api';
 
 const ChatPage = () => {
@@ -19,7 +17,9 @@ const ChatPage = () => {
                 setMessages(res.data);
 
             } catch (err) {
+
                 console.error("Failed to fetch messages:", err);
+
             }
         };
 
@@ -27,18 +27,17 @@ const ChatPage = () => {
     }, []);
 
     const handleSend = async () => {
+        if (!newMessage.trim()) return;
 
-      if (!newMessage.trim()) return;
+        try {
 
-      try {
+            const res = await api.post(API_MESSAGES_URL, { text: newMessage });
+            setMessages((prev) => [...prev, res.data]);
+            setNewMessage("");
 
-        const res = await api.post(API_MESSAGES_URL, { text: newMessage });
-        setMessages((prev) => [...prev, res.data]);
-        setNewMessage("");
-
-      } catch (err) {
-          console.error("Failed to send message:", err);
-      }
+        } catch (err) {
+            console.error("Failed to send message:", err);
+        }
     };
 
   return (

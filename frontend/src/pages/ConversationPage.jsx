@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react"
-import axios from "axios"
-import { Link } from 'react-router-dom'
-//import { refreshToken } from '../auth'
+import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 import api from '../api';
 
 export default function ConversationsPage() {
@@ -30,28 +28,26 @@ export default function ConversationsPage() {
         fetchData();
     }, []);
 
-  const handleSend = async () => {
+    const handleSend = async () => {
+        if (!newConversation.trim()) return;
 
-    if (!newConversation.trim()) return;
+        try {
 
-    try {
+            const res = await api.post(API_CONVERSATIONS_URL, { name: newConversation, participants: [4,5] });
+            setConversations((prev) => [...prev, res.data]);
+            setNewConversation("");
 
-      const res = await api.post(API_CONVERSATIONS_URL,
-                                   { name: newConversation, participants: [4,5] });
-      setConversations((prev) => [...prev, res.data]);
-      setNewConversation("");
+        } catch (err) {
+            console.error("Failed to send message:", err);
+        }
+    };
 
-    } catch (err) {
-      console.error("Failed to send message:", err);
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+
+    if (!conversations || conversations.length === 0) {
+        return <p>No conversations found.</p>;
     }
-  };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-
-  if (!conversations || conversations.length === 0) {
-    return <p>No conversations found.</p>;
-  }
 
   return (
     <div>

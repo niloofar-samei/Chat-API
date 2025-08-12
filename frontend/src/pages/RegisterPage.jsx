@@ -1,6 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api';
 
 export default function LoginPage() {
@@ -14,9 +13,7 @@ export default function LoginPage() {
         e.preventDefault()
 
         try {
-            const response = await axios.post(API_REGISTER_URL,
-                                              { username, password, email,},
-                                             );
+            const response = await axios.post(API_REGISTER_URL, { username, password, email });
 
             localStorage.setItem('accessToken', response.data.access)
             localStorage.setItem('refreshToken', response.data.refresh)
