@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
-import ReactLoginPage, { Logo, Username, Password, Submit } from '@react-login-page/page7';
+import ReactLoginPage, { Logo, Username, Password, Submit, Footer } from '@react-login-page/page7';
 import LoginLogo from 'react-login-page/logo-rect';
 
 export default function LoginPage() {
@@ -44,6 +44,7 @@ export default function LoginPage() {
             <Password name="userPassword" onChange={(e) => setPassword(e.target.value)}/>
             <Submit onClick={handleLogin}>Submit</Submit>
 
+            <Footer>Not a member? <a href='/register/'>Register</a> </Footer>
         </ReactLoginPage>
 
     )
