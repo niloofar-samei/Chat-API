@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-
+import { refreshToken } from '../auth';
 const ChatPage = () => {
     const { conversationId } = useParams();
     console.log(conversationId)
@@ -21,6 +21,17 @@ const ChatPage = () => {
         setMessages(res.data);
       } catch (err) {
         console.error("Failed to fetch messages:", err);
+          if (err.response?.status === 401) {
+              token = await refreshToken();
+              if (token) {
+                  const res = await axios.get(API_MESSAGE_URL, {
+                      headers: { Authorization: `Bearer $(token)` }
+                  });
+                  setMessages(res.data);
+              }
+          } else {
+              alert('Failed to fetch messages');
+          }
       }
     };
 
