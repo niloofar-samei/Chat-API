@@ -8,7 +8,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<ConversationPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/chat/:conversationId" element={<ChatPage />} />
         <Route path="/register" element={<RegisterPage />} />
